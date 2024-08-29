@@ -31,8 +31,7 @@ export class UsersService {
 
   async findByEmail(email: string): Promise<any> {
     // * test code:
-    const { password, ...result } = this.users.find(user => user.email === email);
-    return result;
+    return this.users.find(user => user.email === email);
   }
 
   // ? async findOneByPhone() {}
@@ -40,6 +39,9 @@ export class UsersService {
   // Create 
   async create(email: string, password: string): Promise<any> {
     // * test code:
+    if (await this.findByEmail(email))
+      return undefined;
+
     const user = { id: this.users.length + 1, email: email, password: password };
     this.users.push(user);
     return user;
