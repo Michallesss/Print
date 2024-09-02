@@ -3,6 +3,7 @@
 // ! Add hashing
 import { Injectable } from '@nestjs/common';
 // import { PrismaService } from '../prisma/prisma.service';
+import * as bcrypt from 'bcrypt';
 
 // * test code:
 export type User = { id: number, email: string, password: string }; // todo update return type (from prisma or so)
@@ -12,7 +13,7 @@ export type User = { id: number, email: string, password: string }; // todo upda
 export class UsersService {
   // constructor(private readonly prisma: PrismaService) {}
 
-  private readonly saltOrRound: number = 10;
+  private readonly saltOrRounds: number = 10;
 
   // * test code:
   private users: User[] = [
@@ -42,7 +43,7 @@ export class UsersService {
     if (await this.findByEmail(email))
       return undefined;
 
-    const user = { id: this.users.length + 1, email: email, password: password };
+    const user = { id: this.users.length + 1, email: email, password: await bcrypt.hash(password, this.saltOrRounds) };
     this.users.push(user);
     return user;
   }
