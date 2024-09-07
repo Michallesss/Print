@@ -1,8 +1,10 @@
 // TODO:
 // ! Handle refresh tokens
-import { Body, Controller, Get, HttpCode, HttpStatus, Post, Put, Request, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, Put, Request, UseGuards, UsePipes } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from './auth.guard';
+import { ZodValidationPipe } from 'src/zod.pipe';
+import { signSchema } from './schemas/sign.schema';
 
 @Controller('auth')
 export class AuthController {
@@ -10,15 +12,15 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @Post('login')
-  // @UsePipes(new ZodValidationPipe(loginSchema))
-  signIn(@Body() body: Record<string, any>) { // ? dto
+  @UsePipes(new ZodValidationPipe(signSchema))
+  signIn(@Body() body: { email: string, password: string }) { // ? Record<> dto
     return this.authService.signIn(body.email, body.password);
   } 
 
   @HttpCode(HttpStatus.CREATED)
   @Post('register')
-  // @UsePipes(new ZodValidationPipe(registerSchema))
-  signUp(@Body() body: { email: string, password: string }) { // ? dto
+  @UsePipes(new ZodValidationPipe(signSchema))
+  signUp(@Body() body: { email: string, password: string }) { // ? Record<> dto
     return this.authService.signUp(body.email, body.password);
   }
 
