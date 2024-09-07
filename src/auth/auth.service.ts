@@ -31,7 +31,7 @@ export class AuthService {
     const user = await this.usersService.create(email, pass);
 
     if (!user)
-      throw new UnauthorizedException();
+      throw new UnauthorizedException("User already exists");
 
     const payload = { sub: user.id, email: user.email }; // ! refresh token
     // const { password, ...result } = user;
