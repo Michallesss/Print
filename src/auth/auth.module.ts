@@ -4,10 +4,18 @@ import { ConfigService } from '@nestjs/config';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { UsersModule } from 'src/users/users.module';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from './guards/auth.guard';
 
 @Module({
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [
+    AuthService,
+    { 
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    }
+  ],
   imports: [
     JwtModule.registerAsync({ // ! remove default values if you want to add refresh tokens (use other secret)
       useFactory: (configService: ConfigService) => ({
