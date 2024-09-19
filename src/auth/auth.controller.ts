@@ -1,6 +1,6 @@
 // TODO:
 // ! Handle refresh tokens
-import { Body, Controller, Get, HttpCode, HttpStatus, Post, Put, Request, UseGuards, UsePipes } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, Request, UseGuards, UsePipes } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from './auth.guard';
 import { ZodValidationPipe } from 'src/zod.pipe';
