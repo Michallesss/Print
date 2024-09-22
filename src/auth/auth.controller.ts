@@ -1,16 +1,17 @@
 // TODO:
 // ! Handle refresh tokens
-import { Body, Controller, Get, HttpCode, HttpStatus, Post, Put, Request, UseGuards, UsePipes } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, Request, UsePipes } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { AuthGuard } from './auth.guard';
 import { ZodValidationPipe } from 'src/zod.pipe';
 import { signSchema } from './schemas/sign.schema';
+import { Public } from './decorators/public.decorator';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @HttpCode(HttpStatus.OK)
+  @Public()
   @Post('login')
   @UsePipes(new ZodValidationPipe(signSchema))
   signIn(@Body() body: { email: string, password: string }) { // ? Record<> dto
@@ -18,6 +19,7 @@ export class AuthController {
   } 
 
   @HttpCode(HttpStatus.CREATED)
+  @Public()
   @Post('register')
   @UsePipes(new ZodValidationPipe(signSchema))
   signUp(@Body() body: { email: string, password: string }) { // ? Record<> dto
@@ -31,7 +33,6 @@ export class AuthController {
   // refreshToken() {}
 
   @HttpCode(HttpStatus.OK)
-  @UseGuards(AuthGuard)
   @Get('me')
   getProfile(@Request() request) {
     return request.user;

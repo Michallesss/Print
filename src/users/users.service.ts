@@ -1,6 +1,5 @@
 // TODO:
 // ! Change test code to prisma code
-// ! Add hashing
 import { Injectable } from '@nestjs/common';
 // import { PrismaService } from '../prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
